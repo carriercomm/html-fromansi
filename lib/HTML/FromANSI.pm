@@ -208,6 +208,7 @@ will be ignored.
     style	=> 'line-height: 1; letter-spacing: 0; font-size: 12pt',
     tt		=> 1,
     show_cursor	=> 0,
+    formatted   => 0,
 
     terminal_class => 'Term::VT102::Boundless',
 );
@@ -314,7 +315,7 @@ sub parse_vt {
     foreach my $row_num (1 .. $total_rows) {
         local $SIG{__WARN__} = sub {}; # abandon all hope, ye who enter here
 
-        my $row = $vt->row_text($row_num);
+        my $row = $self->{formatted} ? $vt->row_plaintext($row_num) : $vt->row_text($row_num);
         my $att = $vt->row_attr($row_num);
 
         if ( $row_num == $total_rows and $total_rows != ($self->{rows}||0) # this is the last row
